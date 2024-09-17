@@ -104,8 +104,6 @@ std::optional<HRESULT> c_render::d3d9_present(const decltype(present_hook)& hook
         wnd_proc_hook.install();
         
         imgui_init = true;
-        
-        printf("imgui inited\n");
     }
 
     if (ImGui::GetCurrentContext()) {
@@ -114,6 +112,8 @@ std::optional<HRESULT> c_render::d3d9_present(const decltype(present_hook)& hook
         ImGui_ImplWin32_NewFrame();
 
         ImGui::NewFrame();
+
+        // render here
 
         ImGui::EndFrame();
         ImGui::Render();
