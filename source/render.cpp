@@ -1,5 +1,4 @@
 #include "render.h"
-#include "image.h"
 
 
 using namespace std::placeholders;
@@ -22,7 +21,7 @@ HWND game_window_handle = []() {
 }();
 
 
-c_render::c_render() : imgui_init(false), gui() {
+c_render::c_render() : imgui_init(false) {
 	
     present_hook.set_dest(get_function_address(17));
     reset_hook.set_dest(get_function_address(16));
@@ -89,9 +88,6 @@ std::optional<HRESULT> c_render::d3d9_present(const decltype(present_hook)& hook
         ImGui::GetIO().MouseDrawCursor = false;
         ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
         
-        D3DXCreateTextureFromFileInMemory(device, &logo, sizeof(logo), &gui.texture_logo);
-        D3DXCreateTextureFromFileInMemory(device, &settings, sizeof(settings), &gui.texture_settings);
-        
 #pragma warning(push)
 #pragma warning(disable: 4996)
         std::string font{ getenv("WINDIR") }; font += "\\Fonts\\trebucbd.TTF";
@@ -107,8 +103,6 @@ std::optional<HRESULT> c_render::d3d9_present(const decltype(present_hook)& hook
 
         wnd_proc_hook.install();
         
-        gui.init();
-
         imgui_init = true;
         
         printf("imgui inited\n");
@@ -120,9 +114,7 @@ std::optional<HRESULT> c_render::d3d9_present(const decltype(present_hook)& hook
         ImGui_ImplWin32_NewFrame();
 
         ImGui::NewFrame();
-        
-        gui.process();
-        
+
         ImGui::EndFrame();
         ImGui::Render();
         
@@ -150,26 +142,6 @@ void c_render::d3d9_reset(const decltype(reset_hook)& hook, HRESULT& return_valu
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param);
 
 HRESULT c_render::wnd_proc_handler(const decltype(wnd_proc_hook)& hook, HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
-
-    if (!gui.menu_open)
-        return hook.get_trampoline()(hwnd, u_msg, w_param, l_param);
-
-    switch (u_msg) {
-
-        case WM_KEYDOWN: {
-
-            if (w_param == VK_ESCAPE && gui.menu_open) {
-
-                gui.menu_open = false;
-
-                //samp::RefGame()->SetCursorMode(samp::CURSOR_NONE, true);
-
-                return 1;
-            }
-
-            break;
-        }
-    }
 
     if (u_msg == WM_CHAR) {
 
@@ -202,6 +174,4 @@ c_render::~c_render() {
 
         ImGui::DestroyContext();
     }
-
-    printf("render dctor\n");
 }

@@ -1,16 +1,18 @@
 #pragma once
 
 #include <optional>
-
-#include "gui.h"
-#include "prototypes.h"
-
-#include <kthook/kthook.hpp>
+#include <imgui_impl_dx9.h>
+#include <imgui_impl_win32.h>
+#include <imgui_internal.h>
 
 #include <d3d9.h>
 #include <d3dx9.h>
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
+
+#include "prototypes.h"
+
+#include <kthook/kthook.hpp>
 
 
 using present_t = HRESULT(__stdcall*)(IDirect3DDevice9*, const RECT*, const RECT*, HWND, const RGNDATA*);
@@ -36,8 +38,6 @@ private:
 	HRESULT wnd_proc_handler(const decltype(wnd_proc_hook)& hook, HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param);
 
 public:
-	c_gui gui;
-	
 	c_render();
 	~c_render();
 };

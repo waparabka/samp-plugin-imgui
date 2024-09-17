@@ -36,7 +36,7 @@ FetchContent_MakeAvailable(rakhook imgui)
 add_library(${PROJECT_NAME} SHARED)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC rakhook imgui imgui-win32 imgui-dx9 d3d9 d3dx9 dxguid)
-target_sources(${PROJECT_NAME} PRIVATE source/main.cpp source/plugin.cpp source/render.cpp source/imgui_extensions.cpp)
+target_sources(${PROJECT_NAME} PRIVATE source/main.cpp source/plugin.cpp source/render.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME} SUFFIX ".asi")
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
